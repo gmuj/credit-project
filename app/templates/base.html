@@ -85,4 +85,9 @@
 {% block scripts %}
 {{ super() }}
 {{ moment.include_moment() }}
+<script>
+    $("#submit").addClass("btn-primary");
+    $("#update").addClass("btn-primary");
+    $("#delete").addClass("btn-danger");
+</script>
 {% endblock %}

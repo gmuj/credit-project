@@ -10,7 +10,7 @@
 <div class="col-md-8">
     {% for agency in agencies.items %}
         <p>
-            {{ agency.name }} {{ agency.address }}
+            <a href="{{ url_for('admin.detail_agency', agency_id=agency.id) }}">{{ agency.name }} {{ agency.address }}</a>
         </p>
     {% endfor %}
 {% if agencies.has_prev %}<a href="{{ url_for('admin.list_agencies', page=agencies.prev_num) }}">&lt;&lt; Previous</a> | {% endif %}
