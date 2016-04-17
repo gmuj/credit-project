@@ -3,7 +3,7 @@ from flask.ext.login import login_user, logout_user, login_required, \
     current_user
 from . import auth
 from .. import db
-from ..models import User, Agency
+from ..models import User, Role
 from ..email import send_email
 from .forms import LoginForm, RegistrationForm, ChangePasswordForm,\
     PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm
@@ -51,9 +51,11 @@ def logout():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(email=form.email.data,
+        user = User(name=form.name.data,
+                    email=form.email.data,
                     username=form.username.data,
-                    password=form.password.data)
+                    password=form.password.data,
+                    agency_id=form.agency.data)
         db.session.add(user)
         db.session.commit()
         token = user.generate_confirmation_token()

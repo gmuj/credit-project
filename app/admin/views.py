@@ -3,12 +3,12 @@ from flask.ext.login import login_required
 
 from . import admin
 from .. import db
-from ..models import Agency
+from ..models import Agency, User, Role
 from .forms import AddAgencyForm, EditAgencyForm
 
 
 @admin.route('/agency/add', methods=['GET', 'POST'])
-@login_required
+# @login_required
 def add_agency():
     form = AddAgencyForm()
     if form.validate_on_submit():
@@ -44,3 +44,11 @@ def detail_agency(agency_id):
 def list_agencies(page=1):
     agencies = Agency.query.paginate(page, 10, False)
     return render_template("admin/list_agencies.html", agencies=agencies)
+
+
+@admin.route('/agent/list', methods=['GET'])
+@admin.route('/agent/list/<int:page>', methods=['GET', 'POST'])
+@login_required
+def list_agents(page=1):
+    agents = User.query.filter_by(role_id=Role.AGENT).paginate(page, 10, False)
+    return render_template("admin/list_agents.html", agents=agents)

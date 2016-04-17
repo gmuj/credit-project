@@ -46,7 +46,7 @@ def edit_profile_admin(id):
         user.email = form.email.data
         user.username = form.username.data
         user.confirmed = form.confirmed.data
-        user.role = Role.query.get(form.role.data)
+        user.role_id = Role.query.get(form.role.data)
         user.name = form.name.data
         user.location = form.location.data
         user.about_me = form.about_me.data
@@ -71,7 +71,7 @@ def create_appointment():
                                   email=form.email.data,
                                   phone=form.phone.data,
                                   details=form.details.data,
-                                  agency=form.agency.data)
+                                  agency_id=form.agency.data)
         db.session.add(appointment)
         db.session.commit()
         flash('Your appointment has been registered. We will contact you soon')

@@ -1,5 +1,6 @@
 from datetime import datetime
 import hashlib
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql.schema import ForeignKey
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
@@ -22,7 +23,7 @@ class Appointment(db.Model):
     details = db.Column(db.String(255))
     created_at = db.Column(db.DateTime(), default=datetime.utcnow)
     is_new = db.Column(db.Boolean, default=True)
-    agency = db.Column(db.Integer, ForeignKey('agency.id'))
+    agency_id = db.Column(db.Integer, ForeignKey('agency.id'))
 
 
 class Role:
@@ -35,8 +36,9 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), unique=True, index=True)
     username = db.Column(db.String(64), unique=True, index=True)
-    role = db.Column(db.Integer)
-    agency = db.Column(db.Integer, ForeignKey('agency.id'))
+    role_id = db.Column(db.Integer, default=Role.AGENT)
+    agency_id = db.Column(db.Integer, db.ForeignKey('agency.id'))
+    agency = relationship("Agency")
     password_hash = db.Column(db.String(128))
     confirmed = db.Column(db.Boolean, default=False)
     name = db.Column(db.String(64))
@@ -110,7 +112,7 @@ class User(UserMixin, db.Model):
         return True
 
     def is_administrator(self):
-        return self.role == Role.ADMINISTRATOR
+        return self.role_id == Role.ADMINISTRATOR
 
     def ping(self):
         self.last_seen = datetime.utcnow()
