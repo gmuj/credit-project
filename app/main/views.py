@@ -50,6 +50,7 @@ def edit_profile_admin(id):
         user.name = form.name.data
         user.location = form.location.data
         user.about_me = form.about_me.data
+        user.agency_id = form.agency.data
         db.session.add(user)
         flash('The profile has been updated.')
         return redirect(url_for('.user', username=user.username))
@@ -60,8 +61,19 @@ def edit_profile_admin(id):
     form.name.data = user.name
     form.location.data = user.location
     form.about_me.data = user.about_me
+    form.agency.data = user.agency_id
     return render_template('edit_profile.html', form=form, user=user)
 
+@main.route('/delete-profile/<int:id>', methods=['GET'])
+@login_required
+@admin_required
+def delete_profile_admin(id):
+    user = User.query.get_or_404(id)
+    name = user.name
+    username = user.username
+    db.session.delete(user)
+    flash('The profile {} (username: {}) has been deleted.'.format(name, username))
+    return redirect(url_for('admin.list_agents'))
 
 @main.route('/appointment', methods=['GET', 'POST'])
 def create_appointment():

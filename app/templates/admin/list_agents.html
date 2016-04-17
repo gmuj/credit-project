@@ -19,11 +19,11 @@
         </thead>
         <tbody>
             {% for agent in agents.items %}
-            <tr class='clickable-row' data-href='{{ url_for('main.edit_profile_admin', id=agent.id) }}'>
+            <tr class='clickable-row' data-href='{{ url_for('main.user', username=agent.username) }}'>
                 <td>{{ agent.name }}</td>
                 <td>{{ agent.username }}</td>
                 <td>{{ agent.email }}</td>
-                <td>{{ agent.agency.name }}</td>
+                <td>{% if agent.agency %}{{ agent.agency.name }}{% else %}-{% endif %}</td>
             </tr>
             {% endfor %}
         </tbody>

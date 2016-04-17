@@ -31,11 +31,14 @@ class EditProfileAdminForm(Form):
     name = StringField('Real name', validators=[Length(0, 64)])
     location = StringField('Location', validators=[Length(0, 64)])
     about_me = TextAreaField('About me')
+    agency = SelectField('Agency', validators=[Required()], coerce=int)
     submit = SubmitField('Submit')
 
     def __init__(self, user, *args, **kwargs):
         super(EditProfileAdminForm, self).__init__(*args, **kwargs)
         self.role.choices = [(Role.AGENT, 'Agent'), (Role.ADMINISTRATOR, 'Administrator')]
+        self.agency.choices = [(agency.id, agency.name)
+                               for agency in Agency.query.order_by('name')]
         self.user = user
 
     def validate_email(self, field):
