@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, abort, flash
 from flask.ext.login import login_required, current_user
 from . import main
 from app.models import Appointment
-from .forms import EditProfileForm, EditProfileAdminForm, AppointmentForm
+from .forms import EditProfileForm, EditProfileAdminForm, AppointmentForm, CreditSimulatorForm, CreditSimulatorResult
 from .. import db
 from ..models import Role, User
 from ..decorators import admin_required
@@ -46,7 +46,7 @@ def edit_profile_admin(id):
         user.email = form.email.data
         user.username = form.username.data
         user.confirmed = form.confirmed.data
-        user.role_id = Role.query.get(form.role.data)
+        user.role_id = form.role.data
         user.name = form.name.data
         user.location = form.location.data
         user.about_me = form.about_me.data
@@ -77,3 +77,14 @@ def create_appointment():
         flash('Your appointment has been registered. We will contact you soon')
         return redirect(url_for('main.index'))
     return render_template('appointment.html', form=form)
+
+@main.route('/credit-simulator', methods=['GET', 'POST'])
+def credit_simulator():
+    form = CreditSimulatorForm()
+    result_form = None
+    if form.validate_on_submit():
+        result_form = CreditSimulatorResult()
+        result_form.total_amount.data = 44
+        result_form.dae.data = 4.33
+
+    return render_template('credit_simulator.html', form=form, result_form=result_form)
