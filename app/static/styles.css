@@ -9,3 +9,11 @@
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
     background-color: orange;
 }
+
+.glyphicon.glyphicon-star.red {
+    color: red;
+}
+
+.glyphicon.glyphicon-star.aqua {
+    color: aqua;
+}

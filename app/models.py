@@ -20,6 +20,8 @@ class Appointment(db.Model):
     email = db.Column(db.String(64))
     phone = db.Column(db.Integer())
     details = db.Column(db.String(255))
+    created_at = db.Column(db.DateTime(), default=datetime.utcnow)
+    is_new = db.Column(db.Boolean, default=True)
     agency = db.Column(db.Integer, ForeignKey('agency.id'))
 
 

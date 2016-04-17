@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Programari{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Detalii programare</h1>
+</div>
+<div class="col-md-4">
+    <p><b>Data creari:</b> {{ appointment.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+    <p><b>Nume:</b> {{ appointment.name }}</p>
+    <p><b>Email:</b> {{ appointment.email }}</p>
+    <p><b>Telefon:</b> {{ appointment.phone }}</p>
+    <p><b>Detalii:</b> {% if appointment.details %}{{ appointment.details }}{% else %}-{% endif %}</p>
+    <form role="form" method="post" action="{{ url_for('agent.update_appointment', appointment_id=appointment.id) }}">
+      <div class="form-group">
+        <input class="btn btn-default btn-primary" id="taken" name="taken" type="submit" value="Preluata">
+        <input class="btn btn-default btn-primary" id="delete" name="delete" type="submit" value="Sterge">
+      </div>
+    </form>
+</div>
+{% endblock %}

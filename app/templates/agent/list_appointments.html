@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Programari{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Programari</h1>
+</div>
+<div class="col-md-8">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Created date</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+            <tr>
+        </thead>
+        <tbody>
+            {% for appointment in appointments.items %}
+            <tr class='clickable-row' data-href='detail/{{ appointment.id }}'>
+                <td>
+                    {% if appointment.is_new %}
+                        <span class="glyphicon glyphicon-star red" aria-hidden="true" data-toggle="tooltip" data-placement="left" title="New"></span>
+                    {% else %}
+                        <span class="glyphicon glyphicon-star aqua" aria-hidden="true" data-toggle="tooltip" data-placement="left" title="Old"></span>
+                    {% endif %}
+                </td>
+                <td>{{ appointment.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>{{ appointment.name }}</td>
+                <td>{{ appointment.email }}</td>
+                <td>{{ appointment.phone }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+{% if appointments.has_prev %}<a href="{{ url_for('agent.list_appointments', page=appointments.prev_num) }}">&lt;&lt; Previous</a> | {% endif %}
+{% if appointments.has_next %}<a href="{{ url_for('agent.list_appointments', page=appointments.next_num) }}">Next &gt;&gt;</a>{% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.document.location = $(this).data("href");
+    });
+});
+</script>
+{% endblock %}

@@ -36,4 +36,7 @@ def create_app(config_name):
     from .admin import admin as admin_blueprint
     app.register_blueprint(admin_blueprint, url_prefix='/admin')
 
+    from .agent import agent as agent_blueprint
+    app.register_blueprint(agent_blueprint, url_prefix='/agent')
+
     return app
