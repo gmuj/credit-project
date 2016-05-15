@@ -60,7 +60,6 @@ def update_appointment(appointment_id):
 @login_required
 def list_current_appointments(year, month, day):
     specified_date = datetime.date(year, month, day)
-    print specified_date
     appointments = Appointment.query.order_by('is_new desc', 'created_at desc')\
         .filter(Appointment.reserved_date == specified_date).all()
     return render_template("agent/list_current_appointments.html",
