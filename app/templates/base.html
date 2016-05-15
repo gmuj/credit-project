@@ -19,29 +19,29 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{ url_for('main.index') }}">Credit parohial</a>
+            <a class="navbar-brand" href="{{ url_for('main.index') }}">Credit</a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="{{ url_for('main.index') }}">Home</a></li>
+                <!--<li><a href="{{ url_for('main.index') }}">Home</a></li>-->
                 {% if current_user.is_authenticated %}
                     {% if current_user.is_administrator() %}
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                Agents <b class="caret"></b>
+                                Agenti <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="{{ url_for('auth.register') }}">Add agent</a></li>
-                                <li><a href="{{ url_for('admin.list_agents') }}">List agents</a></li>
+                                <li><a href="{{ url_for('auth.register') }}">Adauga agent</a></li>
+                                <li><a href="{{ url_for('admin.list_agents') }}">List agenti</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                Agencies <b class="caret"></b>
+                                Agentii <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="{{ url_for('admin.add_agency') }}">Add agency</a></li>
-                                <li><a href="{{ url_for('admin.list_agencies') }}">List agencies</a></li>
+                                <li><a href="{{ url_for('admin.add_agency') }}">Adauga agentie</a></li>
+                                <li><a href="{{ url_for('admin.list_agencies') }}">Lista agentii</a></li>
                             </ul>
                         </li>
                         <li><a href="{{ url_for('agent.list_appointments') }}">Programari</a></li>

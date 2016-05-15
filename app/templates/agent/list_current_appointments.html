@@ -1,0 +1,31 @@
+<div class="col-md-8">
+    {% if appointments %}
+        Lista de programari pentru data: {{ specified_date }}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Appointment date</th>
+                    <th>Name</th>
+                <tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                <tr class='clickable-row' data-href='detail/{{ appointment.id }}'>
+                    <td>{{ appointment.reserved_hour }}</td>
+                    <td>{{ appointment.name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        Nici o programare pentru data: {{ specified_date }}
+    {% endif %}
+</div>
+
+<script>
+    jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.document.location = $(this).data("href");
+    });
+});
+</script>

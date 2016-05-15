@@ -22,8 +22,11 @@ class Appointment(db.Model):
     phone = db.Column(db.Integer())
     details = db.Column(db.String(255))
     created_at = db.Column(db.DateTime(), default=datetime.utcnow)
+    reserved_date = db.Column(db.Date())
+    reserved_hour = db.Column(db.Time())
     is_new = db.Column(db.Boolean, default=True)
     agency_id = db.Column(db.Integer, ForeignKey('agency.id'))
+    agent_id = db.Column(db.Integer, ForeignKey('users.id'))
 
 
 class Role:

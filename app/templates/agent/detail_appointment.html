@@ -3,6 +3,12 @@
 
 {% block title %}Programari{% endblock %}
 
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-datepicker/css/bootstrap-datepicker.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-timepicker/css/bootstrap-timepicker.css') }}">
+{% endblock %}
+
 {% block page_content %}
 <div class="page-header">
     <h1>Detalii programare</h1>
@@ -15,9 +21,44 @@
     <p><b>Detalii:</b> {% if appointment.details %}{{ appointment.details }}{% else %}-{% endif %}</p>
     <form role="form" method="post" action="{{ url_for('agent.update_appointment', appointment_id=appointment.id) }}">
       <div class="form-group">
+        <input id="appointment_date" name="appointment_date" type="text" class="form-control" {% if appointment.reserved_date %}value="{{ appointment.reserved_date.strftime('%m/%d/%Y')}}"{% endif %}>
+        <input id="appointment_time" name="appointment_time" type="text" class="form-control" {% if appointment.reserved_hour %}value="{{ appointment.reserved_hour}}"{% endif %}>
         <input class="btn btn-default btn-primary" id="taken" name="taken" type="submit" value="Preluata">
         <input class="btn btn-default btn-primary" id="delete" name="delete" type="submit" value="Sterge">
       </div>
     </form>
 </div>
+<div class="col-md-6" id="calendar">
+
+</div>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='bootstrap-datepicker/js/bootstrap-datepicker.js') }}"></script>
+<script src="{{ url_for('static', filename='bootstrap-timepicker/js/bootstrap-timepicker.js') }}"></script>
+<script>
+var load_appointments = function(selected_date) {
+    var year = selected_date.getFullYear();
+    var month = selected_date.getMonth() + 1;
+    var date = selected_date.getDate();
+
+    $( "#calendar" ).load( "/agent/list_current_appointments/list/" + year + "/" + month + "/" + date);
+};
+
+var appointement_date = $('#appointment_date').datepicker({
+        autoclose: true,
+        startDate: "today"
+    }).on('changeDate', function(e) {
+        load_appointments(e.date);
+    });
+var existing_date = appointement_date.datepicker('getDate');
+if (existing_date) {
+    load_appointments(existing_date);
+}
+
+
+</script>
+<script>$('#appointment_time').timepicker({
+    showMeridian: false,
+});</script>
 {% endblock %}
