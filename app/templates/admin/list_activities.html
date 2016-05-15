@@ -50,6 +50,7 @@
 <script>
 var activity_day = $('#activity_day').datepicker({
         autoclose: true,
+        todayHighlight: true,
         endDate: "today"
     }).on('changeDate', function(e) {
         var year = e.date.getFullYear();

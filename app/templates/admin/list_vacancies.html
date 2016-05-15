@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Concedii{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Concedii</h1>
+</div>
+<div class="col-md-8">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Nume</th>
+                <th>Agentia</th>
+                <th>Perioada</th>
+            <tr>
+        </thead>
+        <tbody>
+            {% for vacancy in vacancies.items %}
+            <tr>
+                <td>{{ vacancy.user.name }}</td>
+                <td>{{ vacancy.user.agency.name }}</td>
+                <td>{{ vacancy.first_day.strftime("%m/%d/%Y")}}&nbsp;&nbsp;-&nbsp;&nbsp;{{ vacancy.last_day.strftime("%m/%d/%Y")}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+{% if vacancies.has_prev %}<a href="{{ url_for('admin.list_vacancies', page=vacancies.prev_num) }}">&lt;&lt; Previous</a> | {% endif %}
+{% if vacancies.has_next %}<a href="{{ url_for('admin.list_vacancies', page=vacancies.next_num) }}">Next &gt;&gt;</a>{% endif %}
+</div>
+{% endblock %}

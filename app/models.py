@@ -38,6 +38,14 @@ class UserActivity(db.Model):
     day = db.Column(db.Date())
 
 
+class UserVacancy(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, ForeignKey('users.id'))
+    user = relationship("User")
+    first_day = db.Column(db.Date())
+    last_day = db.Column(db.Date())
+
+
 class Role:
     AGENT = 1
     ADMINISTRATOR = 2

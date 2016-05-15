@@ -47,9 +47,11 @@
                                 <li><a href="{{ url_for('admin.list_agencies') }}">Lista agentii</a></li>
                             </ul>
                         </li>
-                        <li><a href="{{ url_for('agent.list_appointments') }}">Programari</a></li>
+                        <li><a href="{{ url_for('admin.list_vacancies') }}">Cereri concediu</a></li>
+                        <li><a href="{{ url_for('agent.add_vacancy') }}">Cerere concediu</a></li>
                     {% else %}
                         <li><a href="{{ url_for('agent.list_appointments') }}">Programari</a></li>
+                        <li><a href="{{ url_for('agent.add_vacancy') }}">Cerere concediu</a></li>
                     {% endif %}
                 {% else %}
                     <li><a href="{{ url_for('main.create_appointment') }}">Programare</a></li>

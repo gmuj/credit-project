@@ -4,7 +4,7 @@ from flask.ext.login import login_required
 
 from . import admin
 from .. import db
-from app.models import UserActivity
+from app.models import UserActivity, UserVacancy
 from ..models import Agency, User, Role
 from .forms import AddAgencyForm, EditAgencyForm
 
@@ -64,9 +64,18 @@ def list_activities(year, month, day, page=1):
     return render_template("admin/list_activities.html",
                            activities=activities, selected_date=specified_date)
 
+
 @admin.route('/activities/list', methods=['GET'])
 @admin.route('/activities/list/<int:page>', methods=['GET', 'POST'])
 @login_required
 def list_current_activities(page=1):
     current_date = datetime.datetime.utcnow()
     return list_activities(current_date.year, current_date.month, current_date.day, page=page)
+
+
+@admin.route('/vacancies/list', methods=['GET'])
+@admin.route('/vacancies/list/<int:page>', methods=['GET', 'POST'])
+@login_required
+def list_vacancies(page=1):
+    vacancies = UserVacancy.query.paginate(page, 10, False)
+    return render_template("admin/list_vacancies.html", vacancies=vacancies)

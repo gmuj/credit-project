@@ -3,7 +3,9 @@ from flask import render_template, redirect, request, url_for, flash
 from flask.ext.login import login_required, current_user
 
 from . import agent
+from .forms import AddVacancyForm
 from .. import db
+from app.models import UserVacancy
 from ..models import Appointment
 
 
@@ -62,3 +64,17 @@ def list_current_appointments(year, month, day):
         .filter(Appointment.reserved_date == specified_date).all()
     return render_template("agent/list_current_appointments.html",
                            appointments=appointments, specified_date=specified_date)
+
+@agent.route('/vacancy/add', methods=['GET', 'POST'])
+@login_required
+def add_vacancy():
+    form = AddVacancyForm()
+    if form.validate_on_submit():
+        vacancy = UserVacancy(user_id=current_user.id,
+                              first_day=form.first_day.data,
+                              last_day=form.last_day.data)
+        db.session.add(vacancy)
+        db.session.commit()
+        flash('Cererea de concediu a fost trimisa.')
+        return redirect(url_for('main.index'))
+    return render_template("agent/add_vacancy.html", form=form)

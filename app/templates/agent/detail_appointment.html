@@ -32,13 +32,14 @@
 var load_appointments = function(selected_date) {
     var year = selected_date.getFullYear();
     var month = selected_date.getMonth() + 1;
-    var date = selected_date.getDate();
+    var date = selected_date.getDate() + 1;
 
     $( "#calendar" ).load( "/agent/list_current_appointments/list/" + year + "/" + month + "/" + date);
 };
 
 var appointement_date = $('#appointment_date').datepicker({
         autoclose: true,
+        todayHighlight: true,
         startDate: "today"
     }).on('changeDate', function(e) {
         load_appointments(e.date);
