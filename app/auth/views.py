@@ -1,8 +1,10 @@
+from datetime import datetime
 from flask import render_template, redirect, request, url_for, flash
 from flask.ext.login import login_user, logout_user, login_required, \
     current_user
 from . import auth
 from .. import db
+from app.models import UserActivity
 from ..models import User, Role
 from ..email import send_email
 from .forms import LoginForm, RegistrationForm, ChangePasswordForm,\
@@ -33,6 +35,15 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user is not None and user.verify_password(form.password.data):
             login_user(user, form.remember_me.data)
+            curreny_day = datetime.now()
+            activity = UserActivity.query.filter_by(user_id=current_user.id,
+                                                    day=curreny_day.date()).first()
+            if not activity:
+                activity = UserActivity(day=curreny_day.date(),
+                                        first_login=curreny_day.time(),
+                                        user_id=current_user.id)
+                db.session.add(activity)
+                db.session.commit()
             if user.is_administrator():
                 return redirect(request.args.get('next') or url_for('main.index'))
             else:
@@ -44,6 +55,13 @@ def login():
 @auth.route('/logout')
 @login_required
 def logout():
+    curreny_day = datetime.now()
+    activity = UserActivity.query.filter_by(user_id=current_user.id,
+                                            day=curreny_day.date()).first()
+    if activity:
+        activity.last_logout = curreny_day.time()
+        db.session.add(activity)
+        db.session.commit()
     logout_user()
     flash('You have been logged out.')
     return redirect(url_for('main.index'))

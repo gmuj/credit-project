@@ -29,6 +29,15 @@ class Appointment(db.Model):
     agent_id = db.Column(db.Integer, ForeignKey('users.id'))
 
 
+class UserActivity(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, ForeignKey('users.id'))
+    user = relationship("User")
+    first_login = db.Column(db.Time())
+    last_logout = db.Column(db.Time())
+    day = db.Column(db.Date())
+
+
 class Role:
     AGENT = 1
     ADMINISTRATOR = 2

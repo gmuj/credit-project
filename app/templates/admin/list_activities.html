@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Activitati{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Activitati</h1>
+</div>
+<div>
+    <p>Data: <input id="activity_day" placeholder="Alege alta data" name="activity_day" type="text" {% if selected_date %}value="{{ selected_date.strftime('%m/%d/%Y')}}"{% endif %}></p>
+</div>
+<div class="col-md-8">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Nume</th>
+                <th>Agentia</th>
+                <th>Prima logare</th>
+                <th>Ultima delogare</th>
+            <tr>
+        </thead>
+        <tbody>
+            {% for activity in activities.items %}
+            <tr>
+                <td>{{ activity.user.name }}</td>
+                <td>{{ activity.user.agency.name }}</td>
+                {% if activity.first_login %}
+                    <td>{{ activity.first_login.strftime('%H:%M:%S') }}</td>
+                {% else %}
+                    <td>-</td>
+                {% endif %}
+                {% if activity.last_logout %}
+                    <td>{{ activity.last_logout.strftime('%H:%M:%S') }}</td>
+                {% else %}
+                    <td>-</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+{% if activities.has_prev %}<a href="{{ url_for('admin.list_activities', page=activities.prev_num) }}">&lt;&lt; Previous</a> | {% endif %}
+{% if activities.has_next %}<a href="{{ url_for('admin.list_activities', page=activities.next_num) }}">Next &gt;&gt;</a>{% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+var activity_day = $('#activity_day').datepicker({
+        autoclose: true,
+        endDate: "today"
+    }).on('changeDate', function(e) {
+        var year = e.date.getFullYear();
+        var month = e.date.getMonth() + 1;
+        var date = e.date.getDate();
+
+        window.location.href = "/admin/activities/list/" + year + "/" + month + "/" + date;
+    });
+
+</script>
+{% endblock %}

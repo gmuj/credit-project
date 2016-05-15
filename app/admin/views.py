@@ -1,8 +1,10 @@
+import datetime
 from flask import render_template, redirect, request, url_for, flash
 from flask.ext.login import login_required
 
 from . import admin
 from .. import db
+from app.models import UserActivity
 from ..models import Agency, User, Role
 from .forms import AddAgencyForm, EditAgencyForm
 
@@ -52,3 +54,19 @@ def list_agencies(page=1):
 def list_agents(page=1):
     agents = User.query.filter_by(role_id=Role.AGENT).paginate(page, 10, False)
     return render_template("admin/list_agents.html", agents=agents)
+
+@admin.route('/activities/list/<int:year>/<int:month>/<int:day>', methods=['GET'])
+@admin.route('/activities/list/<int:year>/<int:month>/<int:day>/<int:page>', methods=['GET', 'POST'])
+@login_required
+def list_activities(year, month, day, page=1):
+    specified_date = datetime.date(year, month, day)
+    activities = UserActivity.query.filter_by(day=specified_date).paginate(page, 10, False)
+    return render_template("admin/list_activities.html",
+                           activities=activities, selected_date=specified_date)
+
+@admin.route('/activities/list', methods=['GET'])
+@admin.route('/activities/list/<int:page>', methods=['GET', 'POST'])
+@login_required
+def list_current_activities(page=1):
+    current_date = datetime.datetime.utcnow()
+    return list_activities(current_date.year, current_date.month, current_date.day, page=page)

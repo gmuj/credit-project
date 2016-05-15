@@ -54,10 +54,10 @@ def update_appointment(appointment_id):
     return redirect(url_for("agent.list_appointments"))
 
 
-@agent.route('/list_current_appointments/list/<int:year>/<int:month>/<int:date>', methods=['GET', 'POST'])
+@agent.route('/list_current_appointments/list/<int:year>/<int:month>/<int:day>', methods=['GET', 'POST'])
 @login_required
-def list_current_appointments(year, month, date):
-    specified_date = datetime.date(year, month, date)
+def list_current_appointments(year, month, day):
+    specified_date = datetime.date(year, month, day)
     appointments = Appointment.query.order_by('is_new desc', 'created_at desc')\
         .filter(Appointment.reserved_date == specified_date).all()
     return render_template("agent/list_current_appointments.html",
