@@ -23,7 +23,7 @@
       <div class="form-group">
         <b>Data programarii:</b><input id="appointment_date" placeholder="Selecteaza data" name="appointment_date" type="text" class="form-control" {% if appointment.reserved_date %}value="{{ appointment.reserved_date.strftime('%m/%d/%Y')}}"{% endif %}>
         <b>Ora programarii:</b><input id="appointment_time" placeholder="Selecteaza ora" name="appointment_time" type="text" class="form-control" {% if appointment.reserved_hour %}value="{{ appointment.reserved_hour}}"{% endif %}>
-        <input class="btn btn-default btn-primary" id="taken" name="taken" type="submit" value="Preluata">
+        <input class="btn btn-default btn-primary" id="taken" name="taken" type="submit" value="Programeaza">
         <input class="btn btn-default btn-primary" id="delete" name="delete" type="submit" value="Sterge">
       </div>
     </form>
@@ -60,5 +60,6 @@ if (existing_date) {
 </script>
 <script>$('#appointment_time').timepicker({
     showMeridian: false,
+    defaultTime: false,
 });</script>
 {% endblock %}
