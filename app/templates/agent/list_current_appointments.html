@@ -10,7 +10,7 @@
             </thead>
             <tbody>
                 {% for appointment in appointments %}
-                <tr class='clickable-row' data-href='detail/{{ appointment.id }}'>
+                <tr class='clickable-row' data-href='{{ url_for('agent.detail_appointment', appointment_id=appointment.id) }}'>
                     <td>{{ appointment.reserved_hour.strftime('%H:%M') }}</td>
                     <td>{{ appointment.name }}</td>
                 </tr>
