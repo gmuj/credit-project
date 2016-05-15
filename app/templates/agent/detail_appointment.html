@@ -32,7 +32,7 @@
 var load_appointments = function(selected_date) {
     var year = selected_date.getFullYear();
     var month = selected_date.getMonth() + 1;
-    var date = selected_date.getDate() + 1;
+    var date = selected_date.getDate();
 
     $( "#calendar" ).load( "/agent/list_current_appointments/list/" + year + "/" + month + "/" + date);
 };

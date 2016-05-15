@@ -6,6 +6,7 @@
                 <tr>
                     <th>Ora</th>
                     <th>Nume</th>
+                    <th>Telefon</th>
                 <tr>
             </thead>
             <tbody>
@@ -13,6 +14,7 @@
                 <tr class='clickable-row' data-href='{{ url_for('agent.detail_appointment', appointment_id=appointment.id) }}'>
                     <td>{{ appointment.reserved_hour.strftime('%H:%M') }}</td>
                     <td>{{ appointment.name }}</td>
+                    <td>{{ appointment.phone }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

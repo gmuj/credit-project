@@ -7,6 +7,8 @@
     <div class="page-header">
         <h1>Hello, {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}Stranger{% endif %}!</h1>
     </div>
+    <div class="container" id="agent_current_appointments">
+    </div>
     {% else %}
     <div class="page-header">
         <div class="jumbotron">
@@ -42,3 +44,18 @@
     {% endif %}
 {% endblock %}
 
+{% block scripts %}
+{{ super() }}
+<script>
+    var agent_appointments = $( "#agent_current_appointments" );
+    if (agent_appointments) {
+        var currentDate = new Date();
+        var year = currentDate.getFullYear();
+        var month = currentDate.getMonth() + 1;
+        var day = currentDate.getDate();
+        console.log(currentDate);
+        agent_appointments.load("/agent/list_current_appointments/list/" + year + "/" + month + "/" + day);
+    }
+
+</script>
+{% endblock %}
