@@ -4,14 +4,14 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Appointment date</th>
-                    <th>Name</th>
+                    <th>Ora</th>
+                    <th>Nume</th>
                 <tr>
             </thead>
             <tbody>
                 {% for appointment in appointments %}
                 <tr class='clickable-row' data-href='detail/{{ appointment.id }}'>
-                    <td>{{ appointment.reserved_hour }}</td>
+                    <td>{{ appointment.reserved_hour.strftime('%H:%M') }}</td>
                     <td>{{ appointment.name }}</td>
                 </tr>
                 {% endfor %}
