@@ -5,17 +5,41 @@
 
 {% block page_content %}
 <div class="page-header">
-    <h1>Lista companiilor gasite</h1>
+    <h1>Lista companiilor</h1>
+</div>
+<div>
+    <form role="form" class="form-inline" method="post" action="{{ url_for('admin.list_companies') }}">
+        <div class="form-group">
+            <input class="form-control" id="search_term" placeholder="Cauta companie" name="search_term" type="text">
+        </div>
+        <button type="submit" class="btn btn-primary">Cauta</button>
+    </form>
 </div>
 <div class="col-md-8">
     {% if not companies.items %}
-        <p>Nu am gasit nici o companie</p>
+        <h3>Nu am gasit nici o companie</h3>
+    {% else %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>CIF</th>
+                    <th>Nume</th>
+                    <th>Telefon</th>
+                    <th>Nr. de inregistrare</th>
+                <tr>
+            </thead>
+            <tbody>
+                {% for company in companies.items %}
+                <tr>
+                    <td>{{ company.cif }}</td>
+                    <td>{{ company.name }}</td>
+                    <td>{{ company.phone }}</td>
+                    <td>{{ company.registration_id }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% endif %}
-    {% for company in companies.items %}
-        <p>
-            {{ company.name }}
-        </p>
-    {% endfor %}
 {% if companies.has_prev %}<a href="{{ url_for('admin.list_companies', page=companies.prev_num) }}">&lt;&lt; Previous</a> | {% endif %}
 {% if companies.has_next %}<a href="{{ url_for('admin.list_companies', page=companies.next_num) }}">Next &gt;&gt;</a>{% endif %}
 </div>

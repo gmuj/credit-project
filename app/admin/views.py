@@ -100,15 +100,15 @@ def add_company():
     return render_template("admin/add_company.html", form=form)
 
 
-@admin.route('/companies/search', methods=['GET'])
-@admin.route('/companies/search/<int:page>', methods=['GET', 'POST'])
+@admin.route('/companies/list', methods=['GET', 'POST'])
+@admin.route('/companies/list/<int:page>', methods=['GET', 'POST'])
 @login_required
 def list_companies(page=1):
-    term = None
+    term = request.form.get('search_term')
     if term:
-        companies = Company.query.filter(Company.cif.like('{}%').format(term) |
-                                         Company.name.like('{}%').format(term) |
-                                         Company.registration_id.like('{}%').format(term))\
+        companies = Company.query.filter(Company.cif.like('{}%'.format(term)) |
+                                         Company.name.like('{}%'.format(term)) |
+                                         Company.registration_id.like('{}%'.format(term)))\
                                  .paginate(page, 10, False)
     else:
         companies = Company.query.paginate(page, 10, False)
