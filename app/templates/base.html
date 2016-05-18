@@ -47,9 +47,23 @@
                                 <li><a href="{{ url_for('admin.list_agencies') }}">Lista agentii</a></li>
                             </ul>
                         </li>
-                        <li><a href="{{ url_for('agent.list_appointments') }}">Cereri de programare</a></li>
-                        <li><a href="{{ url_for('admin.list_vacancies') }}">Cereri concediu</a></li>
-                        <li><a href="{{ url_for('agent.add_vacancy') }}">Cerere concediu</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                Concedii <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ url_for('admin.list_vacancies') }}">Lista de cereri</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                Companii <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ url_for('admin.add_company') }}">Adauga companie</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="{{ url_for('agent.list_appointments') }}">Programari</a></li>
                     {% else %}
                         <li><a href="{{ url_for('agent.list_appointments') }}">Cereri de programare</a></li>
                         <li><a href="{{ url_for('agent.add_vacancy') }}">Cerere concediu</a></li>

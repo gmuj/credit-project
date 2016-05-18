@@ -4,9 +4,9 @@ from flask.ext.login import login_required
 
 from . import admin
 from .. import db
-from app.models import UserActivity, UserVacancy
+from app.models import UserActivity, UserVacancy, Company
 from ..models import Agency, User, Role
-from .forms import AddAgencyForm, EditAgencyForm
+from .forms import AddAgencyForm, EditAgencyForm, AddCompanyForm
 
 
 @admin.route('/agency/add', methods=['GET', 'POST'])
@@ -79,3 +79,28 @@ def list_current_activities(page=1):
 def list_vacancies(page=1):
     vacancies = UserVacancy.query.paginate(page, 10, False)
     return render_template("admin/list_vacancies.html", vacancies=vacancies)
+
+
+@admin.route('/companies/add', methods=['GET', 'POST'])
+@login_required
+def add_company():
+    form = AddCompanyForm()
+    if form.validate_on_submit():
+        company = Company(name=form.name.data,
+                            address=form.address.data)
+        db.session.add(company)
+        db.session.commit()
+        flash('Compania {} a fost adaugata.'.format(company.name))
+        return redirect(url_for('main.index'))
+    return render_template("admin/add_company.html", form=form)
+
+
+@admin.route('/companies/search/<term>', methods=['GET'])
+@admin.route('/companies/search/<term>/<int:page>', methods=['GET', 'POST'])
+@login_required
+def list_companies(term, page=1):
+    companies = Company.query.filter(Company.cif.like('{}%').format(term) |
+                                     Company.name.like('{}%').format(term) |
+                                     Company.registration_id.like('{}%').format(term))\
+                             .paginate(page, 10, False)
+    return render_template("admin/list_companies.html", companies=companies)

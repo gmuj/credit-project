@@ -46,6 +46,17 @@ class UserVacancy(db.Model):
     last_day = db.Column(db.Date())
 
 
+class Company(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    cif = db.Column(db.String(64), unique=True, index=True)
+    name = db.Column(db.String(64), index=True)
+    address = db.Column(db.String(128))
+    city = db.Column(db.String(64))
+    state = db.Column(db.String(64))
+    phone = db.Column(db.String(64))
+    registration_id = db.Column(db.String(64), index=True)
+
+
 class Role:
     AGENT = 1
     ADMINISTRATOR = 2
