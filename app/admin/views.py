@@ -95,12 +95,16 @@ def add_company():
     return render_template("admin/add_company.html", form=form)
 
 
-@admin.route('/companies/search/<term>', methods=['GET'])
-@admin.route('/companies/search/<term>/<int:page>', methods=['GET', 'POST'])
+@admin.route('/companies/search', methods=['GET'])
+@admin.route('/companies/search/<int:page>', methods=['GET', 'POST'])
 @login_required
-def list_companies(term, page=1):
-    companies = Company.query.filter(Company.cif.like('{}%').format(term) |
-                                     Company.name.like('{}%').format(term) |
-                                     Company.registration_id.like('{}%').format(term))\
-                             .paginate(page, 10, False)
-    return render_template("admin/list_companies.html", companies=companies)
+def list_companies(page=1):
+    term = None
+    if term:
+        companies = Company.query.filter(Company.cif.like('{}%').format(term) |
+                                         Company.name.like('{}%').format(term) |
+                                         Company.registration_id.like('{}%').format(term))\
+                                 .paginate(page, 10, False)
+    else:
+        companies = Company.query.paginate(page, 10, False)
+    return render_template("admin/list_companies.html", companies=companies, term=term)

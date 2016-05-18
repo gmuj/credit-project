@@ -8,6 +8,9 @@
     <h1>Lista companiilor gasite</h1>
 </div>
 <div class="col-md-8">
+    {% if not companies.items %}
+        <p>Nu am gasit nici o companie</p>
+    {% endif %}
     {% for company in companies.items %}
         <p>
             {{ company.name }}
