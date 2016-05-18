@@ -17,7 +17,7 @@ class EditAgencyForm(BaseAgencyForm):
     delete = SubmitField('Delete agency')
 
 
-class AddCompanyForm(Form):
+class BaseCompanyForm(Form):
     cif = StringField('CIF', validators=[DataRequired(), Length(1, 64)])
     name = StringField('Nume', validators=[DataRequired(), Length(1, 64)])
     address = StringField('Adresa', validators=[DataRequired(), Length(1, 64)])
@@ -25,4 +25,12 @@ class AddCompanyForm(Form):
     state = StringField('Judet', validators=[DataRequired(), Length(1, 64)])
     phone = StringField('Telefon', validators=[DataRequired(), Length(1, 64)])
     registration_id = StringField('Nr. de inregistrare', validators=[DataRequired(), Length(1, 64)])
+
+
+class AddCompanyForm(BaseCompanyForm):
     submit = SubmitField('Salveaza')
+
+
+class EditCompanyForm(BaseCompanyForm):
+    update = SubmitField('Salveaza')
+    delete = SubmitField('Sterge')

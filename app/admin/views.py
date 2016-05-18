@@ -6,7 +6,7 @@ from . import admin
 from .. import db
 from app.models import UserActivity, UserVacancy, Company
 from ..models import Agency, User, Role
-from .forms import AddAgencyForm, EditAgencyForm, AddCompanyForm
+from .forms import AddAgencyForm, EditAgencyForm, AddCompanyForm, EditCompanyForm
 
 
 @admin.route('/agency/add', methods=['GET', 'POST'])
@@ -108,8 +108,26 @@ def list_companies(page=1):
     if term:
         companies = Company.query.filter(Company.cif.like('{}%'.format(term)) |
                                          Company.name.like('{}%'.format(term)) |
+                                         Company.city.like('{}%'.format(term)) |
+                                         Company.state.like('{}%'.format(term)) |
                                          Company.registration_id.like('{}%'.format(term)))\
                                  .paginate(page, 10, False)
     else:
         companies = Company.query.paginate(page, 10, False)
     return render_template("admin/list_companies.html", companies=companies, term=term)
+
+
+@admin.route('/companies/detail/<int:company_id>', methods=['GET', 'POST'])
+def detail_company(company_id):
+    company = Company.query.get_or_404(company_id)
+    form = EditCompanyForm(obj=company)
+    if form.validate_on_submit():
+        if form.update.data:
+            form.populate_obj(company)
+            flash('Compania {} a fost salvata.'.format(company.name))
+        elif form.delete.data:
+            db.session.delete(company)
+            db.session.commit()
+            flash('Compania {} a fost stearsa.'.format(company.name))
+        return redirect(url_for("admin.list_companies"))
+    return render_template("admin/detail_company.html", form=form)
