@@ -86,8 +86,13 @@ def list_vacancies(page=1):
 def add_company():
     form = AddCompanyForm()
     if form.validate_on_submit():
-        company = Company(name=form.name.data,
-                            address=form.address.data)
+        company = Company(cif=form.cif.data,
+                          name=form.name.data,
+                          address=form.address.data,
+                          city=form.city.data,
+                          state=form.state.data,
+                          phone=form.phone.data,
+                          registration_id=form.registration_id.data)
         db.session.add(company)
         db.session.commit()
         flash('Compania {} a fost adaugata.'.format(company.name))
