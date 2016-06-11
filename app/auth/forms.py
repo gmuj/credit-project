@@ -8,24 +8,24 @@ from ..models import User, Agency
 class LoginForm(Form):
     email = StringField('Email', validators=[Required(), Length(1, 64),
                                              Email()])
-    password = PasswordField('Password', validators=[Required()])
-    remember_me = BooleanField('Keep me logged in')
+    password = PasswordField('Parola', validators=[Required()])
+    remember_me = BooleanField('Pastreaza-ma logat')
     submit = SubmitField('Log In')
 
 
 class RegistrationForm(Form):
-    name = StringField('Full name', validators=[Required(), Length(1, 64)])
+    name = StringField('Nume si prenume', validators=[Required(), Length(1, 64)])
     email = StringField('Email', validators=[Required(), Length(1, 64),
                                              Email()])
     username = StringField('Username', validators=[
         Required(), Length(1, 64), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
-                                          'Usernames must have only letters, '
-                                          'numbers, dots or underscores')])
-    password = PasswordField('Password', validators=[
+                                          'Username-ul poate contine doar caractere, '
+                                          'cifre, punct sau undescore')])
+    password = PasswordField('Parola', validators=[
         Required(), EqualTo('password2', message='Passwords must match.')])
-    password2 = PasswordField('Confirm password', validators=[Required()])
-    agency = SelectField('Agency', validators=[Required()], coerce=int)
-    submit = SubmitField('Register')
+    password2 = PasswordField('Confirma parola', validators=[Required()])
+    agency = SelectField('Agentia', validators=[Required()], coerce=int)
+    submit = SubmitField('Inregistrare')
 
     def __init__(self):
         super(RegistrationForm, self).__init__()
@@ -34,45 +34,45 @@ class RegistrationForm(Form):
 
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
-            raise ValidationError('Email already registered.')
+            raise ValidationError('Email-ul exista deja in baza de date.')
 
     def validate_username(self, field):
         if User.query.filter_by(username=field.data).first():
-            raise ValidationError('Username already in use.')
+            raise ValidationError('Username-ul exista deja in baza de date.')
 
 
 class ChangePasswordForm(Form):
-    old_password = PasswordField('Old password', validators=[Required()])
-    password = PasswordField('New password', validators=[
+    old_password = PasswordField('Parola veche', validators=[Required()])
+    password = PasswordField('Parola noua', validators=[
         Required(), EqualTo('password2', message='Passwords must match')])
-    password2 = PasswordField('Confirm new password', validators=[Required()])
-    submit = SubmitField('Update Password')
+    password2 = PasswordField('Confirma noua parola', validators=[Required()])
+    submit = SubmitField('Salveaza')
 
 
 class PasswordResetRequestForm(Form):
     email = StringField('Email', validators=[Required(), Length(1, 64),
                                              Email()])
-    submit = SubmitField('Reset Password')
+    submit = SubmitField('Reseteaza parola')
 
 
 class PasswordResetForm(Form):
     email = StringField('Email', validators=[Required(), Length(1, 64),
                                              Email()])
-    password = PasswordField('New Password', validators=[
+    password = PasswordField('Parola noua', validators=[
         Required(), EqualTo('password2', message='Passwords must match')])
-    password2 = PasswordField('Confirm password', validators=[Required()])
-    submit = SubmitField('Reset Password')
+    password2 = PasswordField('Confirma parola', validators=[Required()])
+    submit = SubmitField('Reseteaza parola')
 
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first() is None:
-            raise ValidationError('Unknown email address.')
+            raise ValidationError('Nu am gasit adresa de email in baza de date.')
 
 
 class ChangeEmailForm(Form):
-    email = StringField('New Email', validators=[Required(), Length(1, 64),
+    email = StringField('Email nou', validators=[Required(), Length(1, 64),
                                                  Email()])
-    password = PasswordField('Password', validators=[Required()])
-    submit = SubmitField('Update Email Address')
+    password = PasswordField('Parola', validators=[Required()])
+    submit = SubmitField('Salveaza')
 
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
