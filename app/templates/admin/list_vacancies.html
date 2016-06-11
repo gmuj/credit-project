@@ -13,6 +13,7 @@
                 <th>Nume</th>
                 <th>Agentia</th>
                 <th>Perioada</th>
+                <th>Actiuni<th>
             <tr>
         </thead>
         <tbody>
@@ -21,6 +22,16 @@
                 <td>{{ vacancy.user.name }}</td>
                 <td>{{ vacancy.user.agency.name }}</td>
                 <td>{{ vacancy.first_day.strftime("%m/%d/%Y")}}&nbsp;&nbsp;-&nbsp;&nbsp;{{ vacancy.last_day.strftime("%m/%d/%Y")}}</td>
+                <td>
+                    {% if vacancy.status == 0 %}
+                        <a class="btn btn-primary btn-success" href="{{ url_for('admin.update_vacancy', vacancy_id=vacancy.id, status='approved') }}">Aproba</a>
+                        <a class="btn btn-primary btn-danger" href="{{ url_for('admin.update_vacancy', vacancy_id=vacancy.id, status='canceled') }}">Anuleaza</a>
+                    {% elif vacancy.status == 1 %}
+                        Aprobat
+                    {% else %}
+                        Anulat
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
         </tbody>

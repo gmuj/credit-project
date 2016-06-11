@@ -1,0 +1,4 @@
+Draga {{ user.username }},
+
+Concediul tau pentru perioada {{ first_day }} - {{ last_day }} nu a fost aprobat.
+Te rugam sa contactezi administratorul agentiei pentru detalii.

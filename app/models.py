@@ -39,12 +39,19 @@ class UserActivity(db.Model):
     day = db.Column(db.Date())
 
 
+class VacancyStatus:
+    PENDING = 0
+    APPROVED = 1
+    CANCELED = 2
+
+
 class UserVacancy(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, ForeignKey('users.id'))
     user = relationship("User")
     first_day = db.Column(db.Date())
     last_day = db.Column(db.Date())
+    status = db.Column(db.Integer, default=VacancyStatus.PENDING)
 
 
 class Company(db.Model):

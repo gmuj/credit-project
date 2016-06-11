@@ -1,0 +1,3 @@
+Draga {{ user.name }},
+
+<Concediul tau pentru perioada {{ first_day }} - {{ last_day }} a fost aprobat.

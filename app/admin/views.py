@@ -4,8 +4,9 @@ from flask.ext.login import login_required
 
 from . import admin
 from .. import db
-from app.models import UserActivity, UserVacancy, Company
+from app.models import UserActivity, UserVacancy, Company, VacancyStatus
 from ..models import Agency, User, Role
+from ..email import send_email
 from .forms import AddAgencyForm, EditAgencyForm, AddCompanyForm, EditCompanyForm
 
 
@@ -77,8 +78,31 @@ def list_current_activities(page=1):
 @admin.route('/vacancies/list/<int:page>', methods=['GET', 'POST'])
 @login_required
 def list_vacancies(page=1):
-    vacancies = UserVacancy.query.paginate(page, 10, False)
+    vacancies = UserVacancy.query.order_by('status', 'first_day desc').paginate(page, 10, False)
     return render_template("admin/list_vacancies.html", vacancies=vacancies)
+
+
+@admin.route('/vacancies/update/<int:vacancy_id>/<string:status>', methods=['GET'])
+@login_required
+def update_vacancy(vacancy_id, status):
+    vacancy = UserVacancy.query.get_or_404(vacancy_id)
+    if status == "approved":
+        vacancy.status = VacancyStatus.APPROVED
+        flash('Concediul pentru {} a fost aprobat.'.format(vacancy.user.name))
+        send_email(vacancy.user.email, 'Concediu aprobat',
+                   'admin/email/vacancy_approved', user=vacancy.user,
+                   first_day=vacancy.first_day, last_day=vacancy.last_day)
+    elif status == "canceled":
+        vacancy.status = VacancyStatus.CANCELED
+        flash('Concediul pentru {} a fost anulat.'.format(vacancy.user.name))
+        send_email(vacancy.user.email, 'Concediu nu a fost aprobat',
+                   'admin/email/vacancy_canceled', user=vacancy.user,
+                   first_day=vacancy.first_day, last_day=vacancy.last_day)
+
+    db.session.add(vacancy)
+    db.session.commit()
+
+    return redirect(url_for("admin.list_vacancies"))
 
 
 @admin.route('/companies/add', methods=['GET', 'POST'])
