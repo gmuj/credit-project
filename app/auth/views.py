@@ -48,7 +48,7 @@ def login():
                 return redirect(request.args.get('next') or url_for('main.index'))
             else:
                 return redirect(request.args.get('next') or url_for('agent.list_appointments'))
-        flash('Invalid username or password.')
+        flash('Username sau parola invalida.')
     return render_template('auth/login.html', form=form)
 
 
@@ -82,7 +82,7 @@ def register():
         token = user.generate_confirmation_token()
         send_email(user.email, 'Confirm Your Account',
                    'auth/email/confirm', user=user, token=token)
-        flash('A confirmation email has been sent to {}.'.format(user.email))
+        flash('Am trimis un email de confirmare la adresa {}.'.format(user.email))
         return redirect(url_for('main.index'))
     return render_template('auth/register.html', form=form)
 
@@ -93,9 +93,9 @@ def confirm(token):
     if current_user.confirmed:
         return redirect(url_for('main.index'))
     if current_user.confirm(token):
-        flash('You have confirmed your account. Thanks!')
+        flash('Adresa de email a fost confirmata cu succes!')
     else:
-        flash('The confirmation link is invalid or has expired.')
+        flash('Link-ul de confirmare este invalid sau a expirat!')
     return redirect(url_for('main.index'))
 
 
@@ -117,10 +117,10 @@ def change_password():
         if current_user.verify_password(form.old_password.data):
             current_user.password = form.password.data
             db.session.add(current_user)
-            flash('Your password has been updated.')
+            flash('Parola a fost schimbata cu succes.')
             return redirect(url_for('main.index'))
         else:
-            flash('Invalid password.')
+            flash('Parola este invalida.')
     return render_template("auth/change_password.html", form=form)
 
 
@@ -137,8 +137,7 @@ def password_reset_request():
                        'auth/email/reset_password',
                        user=user, token=token,
                        next=request.args.get('next'))
-        flash('An email with instructions to reset your password has been '
-              'sent to you.')
+        flash('Am trimis un email la adresa dvs cu instructiunile pentru resetarea parolei.')
         return redirect(url_for('auth.login'))
     return render_template('auth/reset_password.html', form=form)
 
@@ -153,7 +152,7 @@ def password_reset(token):
         if user is None:
             return redirect(url_for('main.index'))
         if user.reset_password(token, form.password.data):
-            flash('Your password has been updated.')
+            flash('Parola a fost schimbata cu succes.')
             return redirect(url_for('auth.login'))
         else:
             return redirect(url_for('main.index'))

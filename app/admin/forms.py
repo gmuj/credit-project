@@ -4,17 +4,17 @@ from wtforms.validators import Length, DataRequired
 
 
 class BaseAgencyForm(Form):
-    name = StringField('Name', validators=[DataRequired(), Length(1, 64)])
-    address = StringField('Address', validators=[DataRequired(), Length(1, 64)])
+    name = StringField('Nume', validators=[DataRequired(), Length(1, 64)])
+    address = StringField('Adresa', validators=[DataRequired(), Length(1, 64)])
 
 
 class AddAgencyForm(BaseAgencyForm):
-    submit = SubmitField('Add agency')
+    submit = SubmitField('Adauga')
 
 
 class EditAgencyForm(BaseAgencyForm):
-    update = SubmitField('Update agency')
-    delete = SubmitField('Delete agency')
+    update = SubmitField('Salveaza')
+    delete = SubmitField('Sterge')
 
 
 class BaseCompanyForm(Form):

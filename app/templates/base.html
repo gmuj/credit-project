@@ -82,9 +82,9 @@
                         {{ current_user.username }} <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a></li>
-                        <li><a href="{{ url_for('auth.change_password') }}">Change Password</a></li>
-                        <li><a href="{{ url_for('auth.change_email_request') }}">Change Email</a></li>
+                        <li><a href="{{ url_for('main.user', username=current_user.username) }}">Profil</a></li>
+                        <li><a href="{{ url_for('auth.change_password') }}">Schimba parola</a></li>
+                        <li><a href="{{ url_for('auth.change_email_request') }}">Schimba email</a></li>
                         <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
                     </ul>
                 </li>
