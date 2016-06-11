@@ -1,13 +1,36 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}Make an appointment{% endblock %}
+{% block title %}Programare{% endblock %}
 
 {% block page_content %}
 <div class="page-header">
-    <h1>Make an appointment</h1>
+    <h1>Programare</h1>
+
+    <ul class="nav nav-tabs" style="border-bottom:none;">
+        <li class="{{ form1_class }}"><a data-toggle="tab" href="#form1">Persoane fizice</a></li>
+        <li class="{{ form2_class }}"><a data-toggle="tab" href="#form2">Companii</a></li>
+    </ul>
 </div>
-<div class="col-md-4">
-    {{ wtf.quick_form(form) }}
+
+<div class="tab-content">
+    <div id="form1" class="tab-pane fade in {{ form1_class }}">
+        <div class="col-md-4">
+            {{ wtf.quick_form(form1) }}
+        </div>
+    </div>
+    <div id="form2" class="tab-pane fade in {{ form2_class }}">
+        <div class="col-md-4">
+            {{ wtf.quick_form(form2) }}
+        <div>
+    </div>
 </div>
+{% endblock %}
+
+
+{% block scripts %}
+{{ super() }}
+<script>
+    $("#company_submit").addClass("btn-primary");
+</script>
 {% endblock %}

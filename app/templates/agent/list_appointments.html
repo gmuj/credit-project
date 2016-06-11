@@ -11,11 +11,12 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>New</th>
-                <th>Created date</th>
-                <th>Name</th>
+                <th>Nou</th>
+                <th>Data crearii</th>
+                <th>Nume</th>
                 <th>Email</th>
-                <th>Phone</th>
+                <th>Telefon</th>
+                <th>CIF (pt companii)</th>
             <tr>
         </thead>
         <tbody>
@@ -32,6 +33,7 @@
                 <td>{{ appointment.name }}</td>
                 <td>{{ appointment.email }}</td>
                 <td>{{ appointment.phone }}</td>
+                <td>{{ appointment.cif|default("-", true) }}</td>
             </tr>
             {% endfor %}
         </tbody>

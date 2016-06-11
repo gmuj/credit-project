@@ -1,8 +1,9 @@
-from flask import render_template, redirect, url_for, abort, flash
+from flask import render_template, redirect, url_for, abort, flash, request
 from flask.ext.login import login_required, current_user
 from . import main
 from app.models import Appointment
-from .forms import EditProfileForm, EditProfileAdminForm, AppointmentForm, CreditSimulatorForm, CreditSimulatorResult
+from .forms import EditProfileForm, EditProfileAdminForm, AppointmentForm, CreditSimulatorForm, CreditSimulatorResult, \
+    CompanyAppointmentForm
 from .. import db
 from ..models import Role, User
 from ..decorators import admin_required
@@ -77,18 +78,39 @@ def delete_profile_admin(id):
 
 @main.route('/appointment', methods=['GET', 'POST'])
 def create_appointment():
-    form = AppointmentForm()
-    if form.validate_on_submit():
-        appointment = Appointment(name=form.name.data,
-                                  email=form.email.data,
-                                  phone=form.phone.data,
-                                  details=form.details.data,
-                                  agency_id=form.agency.data)
-        db.session.add(appointment)
-        db.session.commit()
-        flash('Your appointment has been registered. We will contact you soon')
-        return redirect(url_for('main.index'))
-    return render_template('appointment.html', form=form)
+    form1 = AppointmentForm()
+    form2 = CompanyAppointmentForm()
+
+    if 'company_submit' in request.form:
+        if form2.validate_on_submit():
+            appointment = Appointment(
+                name=form2.company_name.data,
+                email=form2.company_email.data,
+                phone=form2.company_phone.data,
+                details=form2.company_details.data,
+                agency_id=form2.company_agency.data,
+                cif=form2.company_cif.data)
+            db.session.add(appointment)
+            db.session.commit()
+            flash('Programarea a fost inregistrata. Te vom contacta in curand!')
+            return redirect(url_for('main.index'))
+        else:
+            return render_template('appointment.html', form1=form1, form2=form2, form2_class="active")
+    elif 'submit' in request.form:
+        if form1.validate_on_submit():
+            appointment = Appointment(
+                name=form1.name.data,
+                email=form1.email.data,
+                phone=form1.phone.data,
+                details=form1.details.data,
+                agency_id=form1.agency.data)
+            db.session.add(appointment)
+            db.session.commit()
+            flash('Your appointment has been registered. We will contact you soon')
+            return redirect(url_for('main.index'))
+        else:
+            return render_template('appointment.html', form1=form1, form2=form2, form1_class="active")
+    return render_template('appointment.html', form1=form1, form2=form2, form1_class="active")
 
 @main.route('/credit-simulator', methods=['GET', 'POST'])
 def credit_simulator():

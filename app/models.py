@@ -18,6 +18,7 @@ class Agency(db.Model):
 class Appointment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
+    cif = db.Column(db.String(32))
     email = db.Column(db.String(64))
     phone = db.Column(db.Integer())
     details = db.Column(db.String(255))

@@ -53,17 +53,32 @@ class EditProfileAdminForm(Form):
 
 
 class AppointmentForm(Form):
-    name = StringField('Full name', validators=[Length(0, 64)])
+    name = StringField('Nume', validators=[Length(0, 64)])
     email = StringField('Email', validators=[Length(0, 64), Email()])
-    phone = IntegerField('Phone', validators=[Required()])
-    details = TextAreaField('Details (optional)')
-    agency = SelectField('Agency', validators=[Required()], coerce=int)
-    submit = SubmitField('Submit')
+    phone = IntegerField('Telefon', validators=[Required()])
+    details = TextAreaField('Detalii (optional)')
+    agency = SelectField('Agentia', validators=[Required()], coerce=int)
+    submit = SubmitField('Trimite')
 
     def __init__(self):
         super(AppointmentForm, self).__init__()
         self.agency.choices = [(agency.id, agency.name)
                                for agency in Agency.query.order_by('name')]
+
+
+class CompanyAppointmentForm(Form):
+    company_name = StringField('Compania', validators=[Length(0, 64)])
+    company_cif = StringField('CIF', validators=[Required(), Length(0, 64)])
+    company_email = StringField('Email', validators=[Length(0, 64), Email()])
+    company_phone = IntegerField('Telefon', validators=[Required()])
+    company_details = TextAreaField('Detalii (optional)')
+    company_agency = SelectField('Agentia', validators=[Required()], coerce=int)
+    company_submit = SubmitField('Trimite')
+
+    def __init__(self):
+        super(CompanyAppointmentForm, self).__init__()
+        self.company_agency.choices = [(agency.id, agency.name)
+                                       for agency in Agency.query.order_by('name')]
 
 
 class CreditSimulatorForm(Form):
