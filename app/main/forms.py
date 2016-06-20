@@ -85,6 +85,7 @@ class CreditType:
     CREDIT_EXPRESSO = 1
     PRIMA_CASA = 2
     CREDIT_IMOBILIAR = 3
+    CREDIT_REFINANTARE = 4
 
 
 class CreditCurrency:
@@ -94,9 +95,10 @@ class CreditCurrency:
 
 class CreditSimulatorForm(Form):
     credit_type = SelectField('Tipul creditului', validators=[Required()],
-                              choices=[(CreditType.CREDIT_EXPRESSO, 'Credit expresso (nevoi persoanale)'),
-                                       (CreditType.PRIMA_CASA, 'Prima casa'),
-                                       (CreditType.CREDIT_IMOBILIAR, 'Credit Imobiliar Ipotecar')], coerce=int)
+                              choices=[(CreditType.CREDIT_EXPRESSO, 'Credit Expresso (nevoi personale)'),
+                                       (CreditType.PRIMA_CASA, 'Prima Casa'),
+                                       (CreditType.CREDIT_IMOBILIAR, 'Credit Imobiliar Ipotecar'),
+                                       (CreditType.CREDIT_REFINANTARE, 'Credit Refinantare')], coerce=int)
     amount = IntegerField('Suma', validators=[Required()])
     currency = SelectField('Moneda', choices=[(CreditCurrency.RON, 'RON'),
                                               (CreditCurrency.EUR, 'EUR')], coerce=int)

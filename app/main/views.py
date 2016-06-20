@@ -143,6 +143,7 @@ DOBANDA = {
     CreditType.CREDIT_EXPRESSO: 9.75,
     CreditType.PRIMA_CASA: 2.0,
     CreditType.CREDIT_IMOBILIAR: 5.7,
+    CreditType.CREDIT_REFINANTARE: 8.25
 }
 
 
