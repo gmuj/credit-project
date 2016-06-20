@@ -14,5 +14,8 @@
     {% if result_form %}
         {{ wtf.quick_form(result_form) }}
     {% endif %}
+    {% if conversion_rate %}
+        Rata de conversie folosita: {{ conversion_rate }}
+    {% endif %}
 </div>
 {% endblock %}

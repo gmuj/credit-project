@@ -118,16 +118,15 @@ def create_appointment():
     return render_template('appointment.html', form1=form1, form2=form2, form1_class="active")
 
 
-
-
-
 @main.route('/credit-simulator', methods=['GET', 'POST'])
 def credit_simulator():
     form = CreditSimulatorForm()
     result_form = None
+    conversion_rate = None
     if form.validate_on_submit():
         if form.currency.data == CreditCurrency.EUR:
-            amount = convert_eur_to_ron(form.amount.data)
+            conversion_rate = get_conversion_rate()
+            amount = conversion_rate * form.amount.data
         else:
             amount = form.amount.data
         rate, dobanda = calculate_rate(amount, form.credit_type.data, form.duration.data)
@@ -137,7 +136,7 @@ def credit_simulator():
         result_form.total_amount.data = "%.2f RON" % total_amount
         result_form.dobanda.data = "%.2f RON" % dobanda
 
-    return render_template('credit_simulator.html', form=form, result_form=result_form)
+    return render_template('credit_simulator.html', form=form, result_form=result_form, conversion_rate=conversion_rate)
 
 DOBANDA = {
     CreditType.CREDIT_EXPRESSO: 9.75,
@@ -157,9 +156,9 @@ def calculate_rate(credit, credit_type, period):
 EXCHANGE_URL = "http://openapi.ro/api/exchange/eur.json?date={}"
 
 
-def convert_eur_to_ron(amount):
+def get_conversion_rate():
     current_date = datetime.now().strftime("%Y-%m-%d")
     exchange_url = EXCHANGE_URL.format(current_date)
     response = urllib2.urlopen(exchange_url)
     response_data = json.loads(response.read())
-    return amount * float(response_data["rate"])
+    return float(response_data["rate"])
