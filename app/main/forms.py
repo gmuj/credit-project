@@ -81,20 +81,36 @@ class CompanyAppointmentForm(Form):
                                        for agency in Agency.query.order_by('name')]
 
 
+class CreditType:
+    CREDIT_EXPRESSO = 1
+    PRIMA_CASA = 2
+    CREDIT_IMOBILIAR = 3
+
+
+class CreditCurrency:
+    RON = 1
+    EUR = 2
+
+
 class CreditSimulatorForm(Form):
     credit_type = SelectField('Tipul creditului', validators=[Required()],
-                              choices=[(1, 'Prima casa')], coerce=int)
+                              choices=[(CreditType.CREDIT_EXPRESSO, 'Credit expresso (nevoi persoanale)'),
+                                       (CreditType.PRIMA_CASA, 'Prima casa'),
+                                       (CreditType.CREDIT_IMOBILIAR, 'Credit Imobiliar Ipotecar')], coerce=int)
     amount = IntegerField('Suma', validators=[Required()])
-    currency = SelectField('Moneda', choices=[(1, 'RON'), (2, 'EUR')], coerce=int)
+    currency = SelectField('Moneda', choices=[(CreditCurrency.RON, 'RON'),
+                                              (CreditCurrency.EUR, 'EUR')], coerce=int)
     duration = Html5IntegerField('Durata in luni', validators=[Required(), NumberRange(6, 360)])
     submit = SubmitField('Submit')
 
 
 class CreditSimulatorResult(Form):
-    dae = StringField('DAE')
+    rate = StringField('Rata lunara')
+    dobanda = StringField('Dobanda lunara')
     total_amount = StringField('Suma totala de plata')
 
     def __init__(self):
         super(CreditSimulatorResult, self).__init__()
-        read_only(self.dae)
+        read_only(self.rate)
+        read_only(self.dobanda)
         read_only(self.total_amount)

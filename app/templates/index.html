@@ -22,21 +22,21 @@
     <div class="container">
         <div class="col-xs-3">
             <ul class="nav nav-tabs nav-stacked tabs-left">
-                <li class="active"><a data-toggle="tab" href="#credit1">Credit 1</a></li>
-                <li><a data-toggle="tab" href="#credit2">Credit 2</a></li>
-                <li><a data-toggle="tab" href="#credit3">Credit 3</a></li>
+                <li class="active"><a data-toggle="tab" href="#credit1">Creditul imobiliar / ipotecar</a></li>
+                <li><a data-toggle="tab" href="#credit2">Creditul Prima Casa</a></li>
+                <li><a data-toggle="tab" href="#credit3">Creditul expresso (nevoi persoanale)</a></li>
             </ul>
         </div>
         <div class="col-xs-9">
             <div class="tab-content">
                 <div id="credit1" class="tab-pane fade in active">
-                    Credit 1
+                    {% include 'credit/credit1.html' %}
                 </div>
                 <div  id="credit2" class="tab-pane fade">
-                    Credit 2
+                    {% include 'credit/credit2.html' %}
                 </div>
                 <div id="credit3" class="tab-pane fade">
-                    Credit 3
+                    {% include 'credit/credit3.html' %}
                 </div>
             </div>
         </div>

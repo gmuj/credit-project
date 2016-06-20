@@ -1,6 +1,7 @@
 from flask import render_template, redirect, url_for, abort, flash, request
 from flask.ext.login import login_required, current_user
 from . import main
+from app.main.forms import CreditType
 from app.models import Appointment
 from .forms import EditProfileForm, EditProfileAdminForm, AppointmentForm, CreditSimulatorForm, CreditSimulatorResult, \
     CompanyAppointmentForm
@@ -112,13 +113,33 @@ def create_appointment():
             return render_template('appointment.html', form1=form1, form2=form2, form1_class="active")
     return render_template('appointment.html', form1=form1, form2=form2, form1_class="active")
 
+
+
+
+
 @main.route('/credit-simulator', methods=['GET', 'POST'])
 def credit_simulator():
     form = CreditSimulatorForm()
     result_form = None
     if form.validate_on_submit():
+        rate, dobanda = calculate_rate(form.amount.data, form.credit_type.data, form.duration.data)
+        total_amount = (rate * form.duration.data) + (dobanda * form.duration.data)
         result_form = CreditSimulatorResult()
-        result_form.total_amount.data = 44
-        result_form.dae.data = 4.33
+        result_form.rate.data = "%.2f" % rate
+        result_form.total_amount.data = "%.2f" % total_amount
+        result_form.dobanda.data = "%.2f" % dobanda
 
     return render_template('credit_simulator.html', form=form, result_form=result_form)
+
+DOBANDA = {
+    CreditType.CREDIT_EXPRESSO: 9.75,
+    CreditType.PRIMA_CASA: 2.0,
+    CreditType.CREDIT_IMOBILIAR: 5.7,
+}
+
+
+def calculate_rate(credit, credit_type, period):
+    rata_dobanda = DOBANDA[credit_type]
+    rate = credit/period
+    dobanda = credit*(rata_dobanda/100.0)*(period*30/360.0)
+    return rate, dobanda
