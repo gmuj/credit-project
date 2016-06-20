@@ -1,7 +1,11 @@
+from datetime import datetime
+import json
+import urllib
+import urllib2
 from flask import render_template, redirect, url_for, abort, flash, request
 from flask.ext.login import login_required, current_user
 from . import main
-from app.main.forms import CreditType
+from app.main.forms import CreditType, CreditCurrency
 from app.models import Appointment
 from .forms import EditProfileForm, EditProfileAdminForm, AppointmentForm, CreditSimulatorForm, CreditSimulatorResult, \
     CompanyAppointmentForm
@@ -122,12 +126,16 @@ def credit_simulator():
     form = CreditSimulatorForm()
     result_form = None
     if form.validate_on_submit():
-        rate, dobanda = calculate_rate(form.amount.data, form.credit_type.data, form.duration.data)
+        if form.currency.data == CreditCurrency.EUR:
+            amount = convert_eur_to_ron(form.amount.data)
+        else:
+            amount = form.amount.data
+        rate, dobanda = calculate_rate(amount, form.credit_type.data, form.duration.data)
         total_amount = (rate * form.duration.data) + (dobanda * form.duration.data)
         result_form = CreditSimulatorResult()
-        result_form.rate.data = "%.2f" % rate
-        result_form.total_amount.data = "%.2f" % total_amount
-        result_form.dobanda.data = "%.2f" % dobanda
+        result_form.rate.data = "%.2f RON" % rate
+        result_form.total_amount.data = "%.2f RON" % total_amount
+        result_form.dobanda.data = "%.2f RON" % dobanda
 
     return render_template('credit_simulator.html', form=form, result_form=result_form)
 
@@ -143,3 +151,14 @@ def calculate_rate(credit, credit_type, period):
     rate = credit/period
     dobanda = credit*(rata_dobanda/100.0)*(period*30/360.0)
     return rate, dobanda
+
+
+EXCHANGE_URL = "http://openapi.ro/api/exchange/eur.json?date={}"
+
+
+def convert_eur_to_ron(amount):
+    current_date = datetime.now().strftime("%Y-%m-%d")
+    exchange_url = EXCHANGE_URL.format(current_date)
+    response = urllib2.urlopen(exchange_url)
+    response_data = json.loads(response.read())
+    return amount * float(response_data["rate"])
